@@ -20,7 +20,7 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from explorer.models import User, Collection, UserProfile
-
+import os, os.path
 
 class Command(BaseCommand):
     help = 'Setup yang-explorer initial database'

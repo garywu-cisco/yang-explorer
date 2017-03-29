@@ -143,12 +143,12 @@ fi
 		exit -1
 	fi
 
+	echo "Creating database .."
+	python manage.py migrate
 	if [ -d "data/users/guest/cxml" ]; then
 		pushd "data/users/guest/cxml"; CXMLDIR=$(pwd); popd
 		python manage.py setupdb --cxmldir "$CXMLDIR"
 	else
-		echo "Creating database .."
-		python manage.py migrate
 		echo "Creating default users .."
 		python manage.py setupdb
 	fi
