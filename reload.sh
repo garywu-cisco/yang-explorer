@@ -1,13 +1,8 @@
 #!/bin/sh
 
-if [[ $NOVENV != 1 ]]; then
-    echo "Creating / Activating virtualenv .."
-    if [ -f "v/bin/activate" ]; then
-        source v/bin/activate
-    else
-        virtualenv v
-        source v/bin/activate
-    fi
+if [ -f "v/bin/activate" ]; then
+    echo "Activating virtualenv .."
+    source v/bin/activate
 fi
 
 if [ ! -f "server/data/db.sqlite3" ]; then
