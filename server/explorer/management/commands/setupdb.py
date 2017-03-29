@@ -20,7 +20,7 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from explorer.models import User, Collection, UserProfile
-import os, os.path
+
 
 class Command(BaseCommand):
     help = 'Setup yang-explorer initial database'
@@ -28,7 +28,7 @@ class Command(BaseCommand):
     def create_superuser(self):
         User.objects.create_superuser(username='admin', password='admin', email='')
 
-    def create_guestuser(self, cxmldir):
+    def create_guestuser(self):
         guest = User()
         guest.username = 'guest'
         guest.first_name = 'Guest'
@@ -45,28 +45,13 @@ class Command(BaseCommand):
                 guest.user_permissions.add(permission)
 
         # create default model
-        if cxmldir:
-            for f in os.listdir(cxmldir):
-                f_split = os.path.splitext(f)
-                if f_split[1] == '.xml':
-                    profile = UserProfile(user=guest,
-                                          module=os.path.basename(f_split[0]))
-                    profile.save()
-        else:
-            profile = UserProfile(user=guest, module='ietf-interfaces@2013-12-23')
-            profile.save()
+        profile = UserProfile(user=guest, module='ietf-interfaces@2013-12-23')
+        profile.save()
 
         # add default collection
         col = Collection(name='default', user=guest, description='Default Collection')
         col.save()
 
-    def add_arguments(self, parser):
-        # Named (optional) arguments
-        parser.add_argument(
-            '--cxmldir',
-            help='Directory with the precompiled cxml files',
-        )
-
     def handle(self, *args, **options):
         self.create_superuser()
-        self.create_guestuser(cxmldir=options['cxmldir'])
+        self.create_guestuser()

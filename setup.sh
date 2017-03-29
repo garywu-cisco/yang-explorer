@@ -109,10 +109,8 @@ fi
 echo "Setting up initial database .."
 
 if [ -f "server/data/db.sqlite3" ]; then
-	#echo "Database already exist .. skipping"
-	rm "server/data/db.sqlite3"
-fi
-#else
+	echo "Database already exist .. skipping"
+else
     if [[ $UID == 0 ]]; then
         echo ""
         echo "Warning: Setting up database as root, this is not recommended."
@@ -145,15 +143,10 @@ fi
 
 	echo "Creating database .."
 	python manage.py migrate
-	if [ -d "data/users/guest/cxml" ]; then
-		pushd "data/users/guest/cxml"; CXMLDIR=$(pwd); popd
-		python manage.py setupdb --cxmldir "$CXMLDIR"
-	else
-		echo "Creating default users .."
-		python manage.py setupdb
-	fi
+	echo "Creating default users .."
+	python manage.py setupdb
 	cd ..
-#fi
+fi
 
 if [ "$ann_file" != "" ]  && [ -f $ann_file ]; then
 	mkdir -p server/data/annotation
